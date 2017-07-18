@@ -42,13 +42,14 @@ fis.match('::package', {
 });
 
 // 禁用 components
-fis.hook('amd', {
-    extList: ['.atom', '.js'],
-    tab: 4,
-    paths: {
-        'vip-server-renderer': 'node_modules/vip-server-renderer'
+fis.hook('amd', Object.assign(
+    {},
+    require('./amd-conf'),
+    {
+        extList: ['.atom', '.js'],
+        tab: 4
     }
-});
+));
 
 // 不需要处理的目录
 fis.match('{output,scripts}/**', {

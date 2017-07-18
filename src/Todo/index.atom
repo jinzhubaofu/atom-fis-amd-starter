@@ -37,6 +37,8 @@
 </style>
 
 <script>
+import test from '../common/util/test';
+test();
 module.exports = {
     methods: {
         addLike(itemName) {

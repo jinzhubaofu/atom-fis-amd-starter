@@ -1,6 +1,6 @@
 # atom-fis3-starter
 
-使用 atom 和 fis3 来创建网站应用的种子项目
+使用 atom 和 fis3(amd模块产出)来创建网站应用的种子项目
 
 ## 上手指南
 
@@ -34,6 +34,8 @@ open http://localhost:9000/src/Todo/index.php
 ```sh
 npm run watch
 ```
+
+> 建议在开发时开启一个本地服务（npm start）再开一个自动构建（npm run watch）
 
 ## 开发指南
 
@@ -219,3 +221,39 @@ module.exports = function (request) {
 };
 ```
 其中，如果返回的是个函数，那么它还可以拿到当前请求的 url；可以用来做一些更灵活的 mock 处理。
+
+### AMD模块相关
+
+#### AMD 模块加载器
+
+我们使用更轻、更快、更强大的 [esl](https://github.com/ecomfe/esl) 作为 AMD 加载器。
+
+#### 非 atom 的 JS 文件模块编写
+
+在本项目中，所有的模块请按照 `amd` 模块化规范来编写。`atom` 文件会自动被转译成 `amd` 格式不需要额外关注。
+
+#### 使用第三方依赖库
+
+如果添加了第三方依赖库，你需要手动修改 `amd-conf.js` 文件，按着 AMD 标准配置来指定 `paths` / `packages`。在 `fis3` 构建时会读取 `amd-conf.js`，否则将无法定位第三方依赖库地址。
+
+以添加 zepto 库举例：
+
+1. 假设你通过 `npm install zepto` 来添加 zepto，那么它会被安装在 `node_modules/zepto`，其主文件是 `node_modules/zepto/dist/zepto.js`
+2. 你需要在 `amd-conf.js` 中的 `paths` 字段中添加上 zept 的配置：
+
+    ```js
+    {
+        paths: {
+            zepto: 'node_modules/zepto/dist/zepto'
+        }
+    }
+    ```
+3. 现在你就可以在业务代码里使用 `zepto` 了
+
+    ```js
+    import $ from 'zepto';
+    ```
+
+### 非 atom 文件中的 js 使用 babel 进行转译
+
+这个请参考 fis 官网中 babel 相关的插件，自行取舍
