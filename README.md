@@ -53,18 +53,15 @@ npm run watch
 │       ├── AtomWrapper.class.php  // 渲染 atom php 文件用的脚本
 │       ├── get-mock-data.js       // 用于生成 mock 数据
 │       └── index.php              // 本地开发服务器的入口 php 文件
-├── src                            // 所有的源码在这里
-│   ├── Todo                       // 建议每个页面都用一个目录来承载
-│   │   ├── index.php              // 入口模板[关键]
-│   │   ├── index.atom             // 入口 atom 组件[关键]
-│   │   ├── index.mock.js          // mock 数据文件
-│   │   └── List.atom          
-│   └── common                     // 在多个页面中公共使用的模块
-│       └── component              // 公共组件
-│           └── Layout.atom        // 布局组件
-└── static                         // 不需要进行模块化处理的 js
-    └── mod.js                     // 一般我们都使用 npm 包的方式来引入开源库，不需要在这里添加；
-                                   // 由于 mod.js 是我们的加载器，所以就在这里特殊处理。
+└── src                            // 所有的源码在这里
+    ├── Todo                       // 建议每个页面都用一个目录来承载
+    │   ├── index.php              // 入口模板[关键]
+    │   ├── index.atom             // 入口 atom 组件[关键]
+    │   ├── index.mock.js          // mock 数据文件
+    │   └── List.atom          
+    └── common                     // 在多个页面中公共使用的模块
+        └── component              // 公共组件
+            └── Layout.atom        // 布局组件
 ```
 
 
