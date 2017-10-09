@@ -32,4 +32,10 @@ foreach ($data as $key => $value) {
     $atomWrapper->assign($key, $value);
 }
 
+$modifyPathIndex = strripos($templatePath, '/');
+
+$modifyPath = substr($templatePath, 0, $modifyPathIndex) . '/data_modify.php';
+
+$atomWrapper->modifyData($modifyPath);
+
 $atomWrapper->display($templatePath, $componentPath);

@@ -37,6 +37,10 @@ class AtomWrapper {
 
     }
 
+    public function modifyData($modifyPath) {
+        include($modifyPath);
+    }
+
     private function findFile($relativePath) {
         $root = $this->templateDir;
         $absolutePath = "$root/$relativePath";
