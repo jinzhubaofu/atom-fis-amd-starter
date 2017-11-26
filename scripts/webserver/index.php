@@ -12,6 +12,14 @@ require_once(__DIR__.'/../../node_modules/vip-server-renderer/php/server/Atom.cl
 
 $root = getcwd();
 $request = $_SERVER['REQUEST_URI'];
+// 处理*.json文件
+if (preg_match('/\.json($|\?)/', $request)) {
+	$json = file_get_contents("$root/output$request");
+	header('Content-type: application/json;charset=utf-8');
+	header('Content-Length: '.strlen($json));
+    echo $json;
+    return;
+}
 
 // 如果不是 *.php 那么直接返回；
 if (!preg_match('/\.php($|\?)/', $request)) {

@@ -5,7 +5,15 @@
 
 
 fis.set('project.fileType.text', 'atom');
-fis.set('project.files', ['/src/**/*.php']);
+fis.set(
+    'project.files',
+    [
+        '/src/**/*.php',
+        '/src/**/*.atom',
+        '**/*.js',
+        '/mock/**/*.json'
+    ]
+);
 
 // src 为项目目录
 fis.match('/{node_modules, src}/**/*.js', {
@@ -18,6 +26,10 @@ fis.match('/src/**/*.php', {
     isMod: true,
     isHtmlLike: true,
     useSameNameRequire: true
+});
+// mock api json
+fis.match('mock/(**)/(*).json', {
+    release: '/mock/$1/$2.json'
 });
 
 fis.match('(**)/(*).atom', {
