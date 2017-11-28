@@ -3,7 +3,6 @@
         <app-layout>
             <div slot="main">
                 <h4 class="title">hello, {{name}}；我是 index.atom。</h4>
-                <todo-list :list="myList" @addLike="addLike" />
             </div>
             <div slot="aside">
                 这里是侧边栏
@@ -14,13 +13,11 @@
 
 <script type="config">
 {
-    props: ['list', 'name'],
+    props: [],
     data: {
-        myList: list,
-        myName: name
+        name: 'ludafa'
     },
     components: {
-        'todo-list': './List.atom',
         'app-layout': '../common/component/Layout.atom'
     }
 }
@@ -38,16 +35,5 @@
 
 <script>
 module.exports = {
-    methods: {
-        addLike(itemName) {
-            this.myList = this.myList.map(item => Object.assign(
-                {},
-                item,
-                {
-                    like: item.like + (item.name === itemName ? 1 : 0)
-                }
-            ));
-        }
-    }
 };
 </script>

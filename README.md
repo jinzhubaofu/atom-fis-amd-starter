@@ -8,6 +8,7 @@
 
 1. NodeJS(>=6.0)
 2. php(>=5.4)
+3. apm
 
 ### Setup
 
