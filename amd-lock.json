@@ -1,0 +1,41 @@
+{
+  "name": "atom-web-setup",
+  "version": "1.0.0",
+  "dependencies": {
+    "@baidu/vip-server-renderer": {
+      "version": "1.0.47",
+      "author": {
+        "name": "ZhangYuanwei"
+      },
+      "integrity": "581f1bf7bc3aee69776f48ebee344c75740d5310"
+    },
+    "@baidu/esl": {
+      "version": "2.2.0",
+      "integrity": "f18f78174efcff75e89d0d992f0c7218b2f02d75"
+    },
+    "ralltiir": {
+      "version": "2.9.3",
+      "integrity": "17719fa4d43e50a2dced72ba879e926dfe8b8e9e"
+    },
+    "ralltiir-application": {
+      "version": "4.1.10",
+      "integrity": "364d838ce5bc65b73c7ddd5fd08a3babab5fa581"
+    },
+    "@searchfe/promise": {
+      "version": "1.0.3",
+      "author": {
+        "name": "harttle",
+        "email": "harttle@harttle.com"
+      },
+      "integrity": "dee6321c8cee5c3b241de9a0c006aac21763be4e"
+    },
+    "@searchfe/assert": {
+      "version": "1.0.0",
+      "author": {
+        "name": "harttle",
+        "email": "yangjvn@126.com"
+      },
+      "integrity": "f892f1b6af1eb2f2df51715ce8fce790f3c0f29d"
+    }
+  }
+}

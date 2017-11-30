@@ -14,8 +14,9 @@ let componentPath = path.normalize(process.argv[2]);
 let request = process.argv[3];
 let mockFilePath = path.join(
     path.dirname(componentPath),
-    `${path.basename(componentPath, '.atom.php')}.mock.js`
+    `${path.basename(componentPath, '.atom')}.mock.js`
 );
+
 
 if (!fs.existsSync(mockFilePath)) {
     console.log(JSON.stringify({}));

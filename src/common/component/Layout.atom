@@ -10,7 +10,6 @@
 </template>
 <style>
 main {
-    min-height: 100rem;
     display: flex;
     flex-flow: row nowrap;
     align-items: stretch;

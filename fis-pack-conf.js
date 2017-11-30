@@ -67,10 +67,14 @@ fis.match('::packager', {
         'dist/vendor.js': [
             '/static/esl.js',
             '/static/ralltiir.js',
-            '/static/ralltiir-application/service.js'
+            '/static/ralltiir-application/service.js',
+            '/static/vip-server-renderer/js/atom.js'
+        ],
+        'dist/vendor.css': [
         ],
         'dist/common.js': [
-            '/static/common/**/*.js'
+            '/static/common/**/*.js',
+            '/static/ralltiir-application/view/rt-view.css'
         ],
         'dist/Home.js': [
             '/static/Home/index.atom.js',

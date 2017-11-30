@@ -31,7 +31,7 @@
     color: cadetblue;
 }
 .title:before {
-    content: '标题：';
+    content: 'Todo';
     color: #666;
 }
 </style>

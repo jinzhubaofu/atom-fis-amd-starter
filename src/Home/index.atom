@@ -3,9 +3,10 @@
         <app-layout>
             <div slot="main">
                 <h4 class="title">hello, {{name}}；我是 index.atom。</h4>
+                <button @click="addLike">{{like}}</button>
             </div>
             <div slot="aside">
-                这里是侧边栏
+                aside
             </div>
         </app-layout>
     </div>
@@ -13,9 +14,10 @@
 
 <script type="config">
 {
-    props: [],
+    props: ['test', 'age'],
     data: {
-        name: 'ludafa'
+        name: 'ludafa',
+        like: 1
     },
     components: {
         'app-layout': '../common/component/Layout.atom'
@@ -28,12 +30,17 @@
     color: cadetblue;
 }
 .title:before {
-    content: '标题：';
+    content: 'home';
     color: #666;
 }
 </style>
 
 <script>
 module.exports = {
+    methods: {
+        addLike() {
+            this.like++;
+        }
+    }
 };
 </script>

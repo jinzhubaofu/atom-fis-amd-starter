@@ -39,13 +39,15 @@ if (empty($component)) {
     return false;
 }
 
+$templatePath = str_replace('.atom', '.template.php', $component);
+
 $atomWrapper = new AtomWrapper();
 
 $atomWrapper->setTemplateDir("$root/output/template");
 $atomWrapper->assign('component', $component);
 
-// $data = exec("node $root/scripts/webserver/get-mock-data.js $root/$component $request");
-// $data = json_decode($data, true);
+$data = exec("node $root/tools/webserver/get-mock-data.js $root/src/$component $request");
+$data = json_decode($data, true);
 
 if (!empty($data)) {
     foreach ($data as $key => $value) {
@@ -54,6 +56,6 @@ if (!empty($data)) {
 }
 
 $atomWrapper->display(
-    'common/php/index.php',
+    $templatePath,
     "$component.php"
 );

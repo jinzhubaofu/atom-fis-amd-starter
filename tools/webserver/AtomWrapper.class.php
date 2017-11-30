@@ -33,20 +33,7 @@ class AtomWrapper {
 
         $atom = $this->renderAtom($absoluteComponentPath);
 
-        $css = array();
-        foreach ($atom['css'] as $path => $cssText) {
-            $path = str_replace($this->templateDir.'/', '', $path);
-            $path = preg_replace('/\.php$/', '.css', $path);
-            $css[] = array(
-                'path' => $path,
-                'text' => $cssText
-            );
-        }
-
-        $this->renderTemplate($absoluteTemplatePath, array(
-            'css' => $css,
-            'html' => $atom['html'],
-        ));
+        $this->renderTemplate($absoluteTemplatePath, $atom);
 
     }
 
@@ -68,7 +55,8 @@ class AtomWrapper {
         $vnode->setAttribute('atom-root');
 
         // 渲染结果
-        return $atom->renderHtml($componentPath);
+        $result = $atom->renderHtml($componentPath);
+        return $result;
 
     }
 

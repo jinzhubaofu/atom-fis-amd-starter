@@ -1,4 +1,3 @@
-<?php require_once(__DIR__.'/utils.php');?>
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -8,50 +7,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="x5-orientation" content="portrait">
+    <!--STYLE_PLACEHOLDER-->
 </head>
 <body>
 <?php
-$sfHeader = empty($data['sfHeadConfig']) ? array() : $data['sfHeadConfig'];
-$noViewBorder = !empty($sfHeader['sfNoneViewBorder']);
-$noHeaderBorder = !empty($sfHeader['sfNoneHeaderBorder']);
+$rootModule = 'atom-site';
+$sfHead = empty($data['sfHeadConfig']) ? array() : $data['sfHeadConfig'];
+$noViewBorder = !empty($sfHead['sfNoneViewBorder']);
+$noHeaderBorder = !empty($sfHead['sfNoneHeaderBorder']);
+function cx($classes) {
+    $className = '';
+    foreach ($classes as $key => $value) {
+        if (is_array($value)) {
+            $nestedClassName = cx($value);
+            if (!empty($nestedClassName)) {
+                $className .= " $nestedClassName";
+            }
+        }
+        if (!empty($value)) {
+            $className .= ' ' . is_numeric($key) ? $value : $key;
+        }
+    }
+    return $className;
+}
 ?>
 <div id="sfr-app">
     <div class="rt-view active <?php cx(array('no-border' => $noViewBorder));?>">
         <div class="rt-head <?php cx(array('no-border' => $noHeaderBorder));?>">
+            <!--STYLE_PLACEHOLDER-->
             <div class="rt-back OP_LOG_BACK">
-                <?php echo $sfHeader['sfBack']?>
+                <?php echo $sfHead['sfBack']?>
             </div>
             <div class="rt-actions">
-                <?php echo $sfHeader['sfToolOne']?>
-                <?php echo $sfHeader['sfToolTwo']?>
+                <?php echo $sfHead['sfToolOne']?>
+                <?php echo $sfHead['sfToolTwo']?>
             </div>
             <div class="rt-center">
-                <span class="rt-title"><?php echo $sfHeader['sfTitle']?></span>
-                <span class="rt-subtitle"> <?php echo $sfHeader['subtitle']?></span>
+                <span class="rt-title"><?php echo $sfHead['sfTitle']?></span>
+                <span class="rt-subtitle"> <?php echo $sfHead['subtitle']?></span>
             </div>
         </div>
         <div class="rt-body">
-            <link rel="stylesheet" href="/static/ralltiir-application/view/rt-view.css">
-            <?php
-            foreach ($atom['css'] as $css) {
-                echo '<link rel="stylesheet" href="/static/' . $css['path'] . '">';
-            }
-            ?>
-            we are rendering <?php echo $component; ?>
             <?php echo $atom['html']; ?>
+            <!--SCRIPT_PLACEHOLDER-->
+            <script src="/static/@baidu/esl/esl.js"></script>
+            <script src="/static/common/index.js"></script>
+            <!--inject-->
+            <script>
+            require.config({
+                baseUrl: '/static',
+                waitSeconds: 1
+            });
+            var root = '<?php echo $rootModule?>';
+            var AtomMainComponent = root + '/<?php echo $component; ?>';
+            var boot = root + '/common/index';
+            var props = <?php echo json_encode($atom['props']) ?>;
+            var data = {};
+
+            <?php
+            foreach ($atom['props'] as $prop) {
+                if (isset($data[$prop])) {
+                    echo 'data[' . json_encode($prop) . ']=' .json_encode($data[$prop]). ";\n";
+                }
+            }?>
+
+            require([boot, AtomMainComponent], function (index, Component) {
+                index.init(Component, data, props);
+            });
+            </script>
         </div>
     </div>
 </div>
-<script src="/static/@baidu/esl/esl.js"></script><!--ignore-->
-<!--SCRIPT_PLACEHOLDER-->
-<script>
-require.config({
-    baseUrl: '/static'
-});
-var component = '<?php echo $component; ?>';
-require([component, 'ralltiir', 'ralltiir-application/service'], function (Component) {
-    console.log(Component);
-});
-</script>
 </body>
 </html>

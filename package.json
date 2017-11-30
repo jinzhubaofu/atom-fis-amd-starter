@@ -1,44 +1,53 @@
 {
-  "name": "atom-web-setup",
-  "version": "1.0.0",
-  "description": "使用 atom 和 fis3 来创建网站应用的种子项目",
-  "main": "index.js",
-  "scripts": {
-    "build:dev": "rimraf output && fis3 release prod -f fis-conf.js -d output",
-    "dev": "npm run build:dev && npm run start",
-    "build:prod": "rimraf output2 && npm run build:dev && fis3 release -d output2 -f fis-pack-conf.js -c",
-    "watch": "fis3 release -d output -f fis-conf.js -c -w",
-    "start": "php -t output -S 0.0.0.0:9000 tools/webserver/index.php",
-    "postinstall": "apmjs install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jinzhubaofu/atom-fis-starter.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jinzhubaofu/atom-fis-starter/issues"
-  },
-  "homepage": "https://github.com/jinzhubaofu/atom-fis-starter#readme",
-  "devDependencies": {
-    "apmjs": "^2.1.4",
-    "fis-parser-babel-6.x": "^6.24.1",
-    "fis3": "^3.4.33",
-    "fis3-hook-amd": "^0.2.0",
-    "fis3-hook-commonjs": "^0.1.26",
-    "fis3-packager-deps-pack": "^0.1.2",
-    "fis3-parser-atom": "^1.0.0",
-    "fis3-postpackager-loader": "^2.1.4",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.1"
-  },
-  "dependencies": {
-    "vip-server-renderer": "^1.0.25"
-  },
-  "amdDependencies": {
-    "ralltiir": "^2.9.3",
-    "ralltiir-application": "^4.1.10"
-  }
+    "name": "atom-site",
+    "version": "1.0.0",
+    "description": "使用 atom 和 fis3 来创建网站应用的种子项目",
+    "main": "index.js",
+    "scripts": {
+        "build:dev": "rimraf output && fis3 release prod -f fis-conf.js -d output --clean",
+        "dev": "npm run build:dev && npm run start",
+        "build:prod": "rimraf output2 && npm run build:dev && fis3 release -d output2 -f fis-pack-conf.js -c",
+        "watch": "fis3 release -d output -f fis-conf.js -c -w",
+        "start": "php -t output -S 0.0.0.0:9000 tools/webserver/index.php",
+        "postinstall": "apmjs install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jinzhubaofu/atom-fis-starter.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jinzhubaofu/atom-fis-starter/issues"
+    },
+    "homepage": "https://github.com/jinzhubaofu/atom-fis-starter#readme",
+    "devDependencies": {
+        "apmjs": "^2.1.4",
+        "fis-parser-babel-6.x": "^6.24.1",
+        "fis3": "^3.4.33",
+        "fis3-hook-amd": "^0.2.0",
+        "fis3-hook-commonjs": "^0.1.26",
+        "fis3-packager-deps-pack": "^0.1.2",
+        "fis3-parser-atom": "^1.1.1",
+        "fis3-postpackager-loader": "^2.1.4",
+        "fis3-preprocessor-js-require-css": "^0.1.3",
+        "mkdirp": "^0.5.1",
+        "rimraf": "^2.6.1"
+    },
+    "dependencies": {
+        "vip-server-renderer": "^1.0.25"
+    },
+    "amdDependencies": {
+        "@baidu/vip-server-renderer": "^1.0.47",
+        "@baidu/esl": "^2.2.0",
+        "ralltiir": "^2.9.3",
+        "ralltiir-application": "^4.1.10"
+    },
+    "project": {
+        "staticDir": "static",
+        "templateDir": "template",
+        "moduleName": "atom-site",
+        "cdnURL": ""
+    }
 }
