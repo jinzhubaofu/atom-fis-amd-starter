@@ -1,14 +1,15 @@
 <template>
     <div>
-        <app-layout>
-            <div slot="main">
-                <h4 class="title">hello, {{name}}；我是 index.atom。</h4>
-                <button @click="addLike">{{like}}</button>
-            </div>
-            <div slot="aside">
-                aside
-            </div>
-        </app-layout>
+        <img src="cat.jpg" class="avatar" />
+        <ul class="posts">
+            <li a-for="post in posts" class="post">
+                <post
+                    :title="post.title"
+                    :id="post.id"
+                    :description="post.description"
+                    :createTime="post.createTime" />
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -20,7 +21,8 @@
         like: 1
     },
     components: {
-        'app-layout': '../common/component/Layout.atom'
+        'app-layout': '../common/component/Layout.atom',
+        'post': './Post.atom'
     }
 }
 </script>
@@ -28,10 +30,25 @@
 <style scoped>
 .title {
     color: cadetblue;
+    font-size: 1rem;
+    margin: .5rem 0
 }
 .title:before {
-    content: 'home';
+    content: '#';
     color: #666;
+    margin: .5rem;
+}
+.avatar {
+    width: 100%;
+}
+.posts {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+.post {
+    margin-top: 1rem;
+    padding: .5rem;
 }
 </style>
 

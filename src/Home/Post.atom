@@ -1,0 +1,56 @@
+<template>
+    <a class="main" :href="url" :data-sf-href="url">
+        <h4 class="title">{{title}}</h4>
+        <p>{{summary}}</p>
+        <footer class="footer">{{createTime}}</footer>
+    </a>
+</template>
+
+<script type="config">
+{
+    props: ['title', 'id', 'description', 'createTime']
+}
+</script>
+
+<style scoped>
+.main {
+    height: 5rem;
+    color: #333;
+    text-decoration: none
+}
+.main:visited {
+    color: #333
+}
+.title {
+    font-size: 1.5rem;
+    margin: .5rem 0;
+}
+.footer {
+    color: #999
+}
+</style>
+<script type="php">
+function computed_summary($ctx) {
+    $desc = $ctx->_d['description'];
+    return mb_strlen($desc) > 50 ? substr($desc, 50) . '...' : $desc;
+}
+function computed_url($ctx) {
+    return '/post?id=' . $ctx->_d['id'];
+}
+</script>
+<script>
+export default {
+    computed: {
+        summary() {
+            let description = this.description;
+            let summary = description.length > 50
+                ? `${description.slice(0, 50)}...`
+                : description;
+            return summary;
+        },
+        url() {
+            return `/post?id=${this.id}`;
+        }
+    }
+};
+</script>

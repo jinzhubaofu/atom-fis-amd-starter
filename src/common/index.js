@@ -4,10 +4,6 @@
  */
 
 import Atom from '@baidu/vip-server-renderer/js/atom';
-import ralltiir from 'ralltiir';
-import Service from 'ralltiir-application';
-
-import 'ralltiir-application/view/rt-view.css';
 
 export function init(MainComponent, data, props) {
     new Atom({
@@ -24,7 +20,6 @@ export function init(MainComponent, data, props) {
                 },
                 {}
             );
-            console.log('props', a);
             return createElement(
                 'app',
                 {

@@ -1,3 +1,4 @@
 {
-    "/": "Home/index.atom"
+    "/": "Home/index.atom",
+    "/post": "Post/index.atom"
 }

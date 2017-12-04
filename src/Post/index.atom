@@ -1,0 +1,42 @@
+<template>
+    <article>
+        <h4 class="title">{{title}}</h4>
+        <p
+            a-for="section in sections"
+            class="content"
+            @click="hello">{{section}}</p>
+    </article>
+</template>
+
+<script type="config">
+{
+    props: ['title', 'sections']
+}
+</script>
+
+<style scoped>
+.title {
+    font-size: 1.5rem;
+    color: cadetblue;
+    margin: .5rem 0
+}
+.title:before {
+    content: '#';
+    margin: .5rem;
+    color: #666;
+}
+.content {
+    font-size: 1rem;
+    padding: .5rem;
+}
+</style>
+
+<script>
+export default {
+    methods: {
+        hello() {
+            console.log('hello');
+        }
+    }
+};
+</script>

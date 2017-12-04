@@ -9,10 +9,14 @@
 const path = require('path');
 const {project} = require('./package.json');
 const {
-    staticDir = 'static',
-    templateDir = 'template',
+    dir,
     moduleName
 } = project;
+
+const {
+    static: staticDir,
+    template: templateDir
+} = dir;
 
 // 使用 amd hook 将所有模块包裹为 amd 输出
 // 因此在 atom 转译和 bable 转译时都只需要输出为 commonjs 格式即可（输出为 amd 格式 amd hook 接受不了）
@@ -25,7 +29,7 @@ fis.match('/amd_modules/ralltiir/**', {
 });
 
 // 不需要处理的目录
-fis.match('{output,output2,scripts}/**', {
+fis.match('{output,docs,scripts}/**', {
     release: false
 });
 
@@ -40,11 +44,14 @@ fis.set('project.files', [
 
 // 所有的 src 下的文件都进行构建
 fis.match('/src/(**)', {
-    release: `${staticDir}/$1`
+    release: `${staticDir}/${moduleName}/$1`
 });
 
 fis.match('/src/(**).atom', {
+
+    // 以模块分析 atom 文件
     isMod: true,
+
     // fis3 不支持多重后缀，即不支持 .atom.js；
     rExt: 'js',
 
@@ -60,39 +67,37 @@ fis.match('/src/(**).atom', {
     parser: fis.plugin('atom', {mode: 'commonjs'}),
 
     // 由于上边不支持多重后缀，所以我们这里 release 的时候加上后缀
-    release: `/${staticDir}/$1.atom.js`
+    // 此处需要将atom发布到指定的模块目录中
+    release: `/${staticDir}/${moduleName}/$1.atom.js`
 
-});
-
-fis.match('/src/(**)/index.atom', {
-    preprocessor: fis.plugin(
-        'generate-html',
-        {
-            template: path.join(__dirname, 'src/common/php/index.php'),
-            output(filePath) {
-                let dir = path.dirname(filePath);
-                let ext = path.extname(filePath);
-                let basename = path.basename(filePath, ext);
-                return `${dir}${path.sep}${basename}.template.php`;
-            }
-        }
-    )
 });
 
 // 输出 php (包含 atom 编译出来的，也包含我们自己编写的)
 fis.match('/src/(**).php', {
+
+    // 按模块来处理
     isMod: true,
+
+    // 按 html 来处理
     isHtmlLike: true,
+
+    // 开启同名依赖
     useSameNameRequire: true,
+
+    // 发布到模板目录中
     release: `/${templateDir}/$1.php`
+
 });
 
 // 处理 src 中的 css
 fis.match('/src/(**).css', {
+
     // 要把 css 也按模块来处理，否则合并时会被跳过
     isMod: true,
-    useSameNameRequire: true,
-    release: `${staticDir}/$1.css`
+
+    // 此处需要将 css 发布到指定的模块目录中
+    release: `${staticDir}/${moduleName}/$1.css`
+
 });
 
 // 处理 src 中 js
@@ -103,6 +108,9 @@ fis.match('/src/(**).js', {
 
     // 将模块名中的 src 给去掉，否则 fis 会按文件名来完成 amd 模块名
     moduleId: `${moduleName}/$1`,
+
+    // 将 js 模块发布到指定的模块目录中
+    release: `/${staticDir}/${moduleName}/$1`,
 
     // 加入 js-require-css
     // 1. 在 js 模块中可以 `require('./xxx.css')`
@@ -124,52 +132,106 @@ fis.match('amd_modules/(**).({js,css})', {
     release: `${staticDir}/$1.$2`
 });
 
-fis.match('::package', {
-    postpackager: fis.plugin('loader', {
-        allInOne: {
-            css: `${staticDir}/index.bundle.css`,
-            js: `${staticDir}/index.bundle.js`
-        }
-    })
+// 不发布 mock 脚本
+// 这个需要放在最后，以保证不会被普通js的规则覆盖
+fis.match('/src/**.mock.js', {
+    release: false
 });
 
-fis.match('::packager', {
-    packager: fis.plugin('deps-pack', {
-        'dist/vendor.js': [
-            '/amd_modules/@baidu/esl/esl.js',
-            '/amd_modules/@baidu/vip-server-renderer/js/atom.js',
-            '/amd_modules/ralltiir.js',
-            '/amd_modules/ralltiir.js:deps',
-            '/amd_modules/ralltiir.js:asyncs',
-            '/amd_modules/ralltiir-application/service.js',
-            '/amd_modules/ralltiir-application/service.js:deps',
-            '/amd_modules/ralltiir-application/service.js:asyncs'
-        ],
-        'dist/common.js': [
-            '/src/common/**.js',
-            '/src/common/**.atom'
-        ],
-        'dist/common.css': [
-            '/src/common/**/*.js:deps',
-            '/src/common/**/*.atom:deps'
-        ],
-        'dist/Home.js': [
-            '/src/Home/index.atom',
-            '/src/Home/index.atom.js',
-            '/src/Home/index.atom.js:deps',
-            '/src/Home/index.atom:deps',
-            '/src/Home/index.atom:asyncs'
-        ],
-        'dist/Home.css': [
-            '/src/Home/index.atom:deps'
-        ],
-        'dist/Todo.js': [
-            '/src/Todo/index.atom',
-            '/src/Todo/index.atom:deps',
-            '/src/Todo/index.atom:asyncs'
-        ],
-        'dist/Todo.css': [
-            '/src/Todo/index.atom:deps'
-        ]
+fis
+    .media('dev')
+
+    // 生成每个页面的入口 php
+    .match('/src/(**)/index.atom', {
+        preprocessor: fis.plugin(
+            'generate-html',
+            {
+                template: path.join(__dirname, 'src/common/php/index.php'),
+                output(filePath) {
+                    let dir = path.dirname(filePath);
+                    let ext = path.extname(filePath);
+                    let basename = path.basename(filePath, ext);
+                    return `${dir}${path.sep}${basename}.template.php`;
+                },
+                replace: ''
+            }
+        )
+    });
+
+fis
+    .media('prod')
+    .match('/src/(**)/index.atom', {
+        useHash: true,
+        preprocessor: fis.plugin(
+            'generate-html',
+            {
+                template: path.join(__dirname, 'src/common/php/index.php'),
+                output(filePath) {
+                    let dir = path.dirname(filePath);
+                    let ext = path.extname(filePath);
+                    let basename = path.basename(filePath, ext);
+                    return `${dir}${path.sep}${basename}.template.php`;
+                }
+            }
+        )
     })
-});
+    .match('**.php', {
+        parser: fis.plugin('jdists', {
+            remove: 'debug'
+        })
+    })
+    .match('/src/**.{js,atom,css,ttf,woff,woff2,svg,jpeg,jpg,png,gif}', {
+        useHash: true,
+        useMap: true
+    })
+    .match('/dist/**', {
+        useHash: true,
+        useMap: true
+    })
+    .match('::package', {
+        postpackager: fis.plugin('loader', {
+            include: ['/src/*/index.atom', '/src/common/index.js'],
+            // allInOne: {
+            //     js: 'dist/index.bundle.js'
+            // },
+            useInlineMap: true
+        })
+    })
+    .match('::packager', {
+        packager: fis.plugin('deps-pack', {
+            'dist/vendor.js': [
+                '/amd_modules/@baidu/esl/esl.js',
+                '/amd_modules/@baidu/vip-server-renderer/js/atom.js',
+                '/amd_modules/ralltiir.js',
+                '/amd_modules/ralltiir.js:deps',
+                '/amd_modules/ralltiir.js:asyncs',
+                '/amd_modules/ralltiir-application/service.js',
+                '/amd_modules/ralltiir-application/service.js:deps',
+                '/amd_modules/ralltiir-application/service.js:asyncs'
+            ],
+            'dist/common.js': [
+                '/src/common/**.js',
+                '/src/common/**.atom'
+            ],
+            'dist/common.css': [
+                '/src/common/**/*.js:deps',
+                '/src/common/**/*.atom:deps'
+            ],
+            'dist/Home.js': [
+                '/src/Home/index.atom',
+                '/src/Home/index.atom:deps',
+                '/src/Home/index.atom:asyncs'
+            ],
+            'dist/Home.css': [
+                '/src/Home/index.atom:deps'
+            ],
+            'dist/Post.js': [
+                '/src/Post/index.atom',
+                '/src/Post/index.atom:deps',
+                '/src/Post/index.atom:asyncs'
+            ],
+            'dist/Post.css': [
+                '/src/Post/index.atom:deps'
+            ]
+        })
+    });
