@@ -160,6 +160,7 @@ fis
 
 fis
     .media('prod')
+    // 生成每个页面的入口 php
     .match('/src/(**)/index.atom', {
         useHash: true,
         preprocessor: fis.plugin(
@@ -175,31 +176,40 @@ fis
             }
         )
     })
+    // 移除 php 中的 <!--debug-->
     .match('**.php', {
         parser: fis.plugin('jdists', {
             remove: 'debug'
         })
     })
+    // 给各类源码加上 md5 值
     .match('/src/**.{js,atom,css,ttf,woff,woff2,svg,jpeg,jpg,png,gif}', {
         useHash: true,
         useMap: true
     })
-    .match('/dist/**', {
-        useHash: true,
-        useMap: true
+    // 给 bundle 加上 md5 值
+    .match('/bundle/**', {
+        useHash: true
+    })
+    // 压缩 js
+    .match('/{src,amd_modules}/**.{js,atom}', {
+        optimizer: fis.plugin('uglify-js')
+    })
+    // 压缩 css
+    .match('/src/**.css', {
+        optimizer: fis.plugin('clean-css')
     })
     .match('::package', {
         postpackager: fis.plugin('loader', {
-            include: ['/src/*/index.atom', '/src/common/index.js'],
-            // allInOne: {
-            //     js: 'dist/index.bundle.js'
-            // },
+            include: [
+                '/src/*/index.atom'
+            ],
             useInlineMap: true
         })
     })
     .match('::packager', {
         packager: fis.plugin('deps-pack', {
-            'dist/vendor.js': [
+            'bundle/vendor.js': [
                 '/amd_modules/@baidu/esl/esl.js',
                 '/amd_modules/@baidu/vip-server-renderer/js/atom.js',
                 '/amd_modules/ralltiir.js',
@@ -209,29 +219,22 @@ fis
                 '/amd_modules/ralltiir-application/service.js:deps',
                 '/amd_modules/ralltiir-application/service.js:asyncs'
             ],
-            'dist/common.js': [
-                '/src/common/**.js',
-                '/src/common/**.atom'
+            // 'bundle/common.js': [
+            //     '/src/common/**.js',
+            //     '/src/common/**.atom'
+            // ],
+            // 'bundle/common.css': [
+            //     '/src/common/**/*.js:deps',
+            //     '/src/common/**/*.atom:deps'
+            // ],
+            'bundle/biz.js': [
+                '/src/*/index.atom',
+                '/src/*/index.atom:deps',
+                '/src/*/index.atom:asyncs'
             ],
-            'dist/common.css': [
-                '/src/common/**/*.js:deps',
-                '/src/common/**/*.atom:deps'
-            ],
-            'dist/Home.js': [
-                '/src/Home/index.atom',
-                '/src/Home/index.atom:deps',
-                '/src/Home/index.atom:asyncs'
-            ],
-            'dist/Home.css': [
-                '/src/Home/index.atom:deps'
-            ],
-            'dist/Post.js': [
-                '/src/Post/index.atom',
-                '/src/Post/index.atom:deps',
-                '/src/Post/index.atom:asyncs'
-            ],
-            'dist/Post.css': [
-                '/src/Post/index.atom:deps'
+            'bundle/biz.css': [
+                '/src/*/index.atom:deps',
+                '/src/*/index.atom:asyncs'
             ]
         })
     });
