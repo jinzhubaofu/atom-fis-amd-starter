@@ -48,7 +48,7 @@ npm run build:prod
 
 ```sh
 npm start
-open http://localhost:9000/src/Todo/index.php
+open http://localhost:9000
 ```
 
 ### 修改后自动构建
