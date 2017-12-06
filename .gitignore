@@ -4,3 +4,4 @@ node_modules
 templates_c
 output*
 amd_modules
+package-lock.json

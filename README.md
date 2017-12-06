@@ -363,7 +363,7 @@ npm run watch
 
 对于后端服务来讲（php开发同学），除了 `atom` 的 php runtime 之外，我们还需要提供构建产物中的 `template` 目录。
 
-> 我们提供了一个简单的本地开发服务器，使用了 AtomWrapper，可供[参考](https://github.com/jinzhubaofu/atom-fis-starter/blob/master/tools/webserver/index.php)
+> 我们提供了一个简单的本地开发服务器，使用了 AtomWrapper，可供[参考](https://github.com/jinzhubaofu/atom-fis-amd-starter/blob/master/tools/webserver/index.php)
 
 ### atom 的根结点
 
