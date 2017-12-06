@@ -15,7 +15,8 @@ const {
 
 const {
     static: staticDir,
-    template: templateDir
+    template: templateDir,
+    bundle: bundleDir
 } = dir;
 
 // 使用 amd hook 将所有模块包裹为 amd 输出
@@ -140,7 +141,6 @@ fis.match('/src/**.mock.js', {
 
 fis
     .media('dev')
-
     // 生成每个页面的入口 php
     .match('/src/(**)/index.atom', {
         preprocessor: fis.plugin(
@@ -188,7 +188,7 @@ fis
         useMap: true
     })
     // 给 bundle 加上 md5 值
-    .match('/bundle/**', {
+    .match(`/${bundleDir}/**`, {
         useHash: true
     })
     // 压缩 js
@@ -199,17 +199,23 @@ fis
     .match('/src/**.css', {
         optimizer: fis.plugin('clean-css')
     })
+    // 此处会在页面入口 php 中生成 require.config.paths 数据
+    // 用于进行多页面间的分离 bundle 路径配置，在将业务代码拆分为多个 bundle 时是必需的
+    // 目前的配置是将所有的业务代码都合并为 biz 暂时无用。
     .match('::package', {
         postpackager: fis.plugin('loader', {
-            include: [
-                '/src/*/index.atom'
-            ],
+            // 包含每个页面入口
+            include: ['/src/**/index.atom', '/src/common/index.js'],
+            // 此处设置为 true，会在入口 php 中置入 script 标签来输出 require.config.paths(推荐)
+            // 如果设置为 false，会在入口的 js 中置入 require.config.paths
             useInlineMap: true
         })
     })
+    // 合并打包配置
     .match('::packager', {
         packager: fis.plugin('deps-pack', {
-            'bundle/vendor.js': [
+            // 将所有的外部依赖都打包到 vendor 中
+            [`${bundleDir}/vendor.js`]: [
                 '/amd_modules/@baidu/esl/esl.js',
                 '/amd_modules/@baidu/vip-server-renderer/js/atom.js',
                 '/amd_modules/ralltiir.js',
@@ -219,22 +225,30 @@ fis
                 '/amd_modules/ralltiir-application/service.js:deps',
                 '/amd_modules/ralltiir-application/service.js:asyncs'
             ],
-            // 'bundle/common.js': [
+            // option1: 将所有的业务代码都打包到 biz 中
+            [`${bundleDir}/biz.js`]: [
+                '/src/**.js',
+                '/src/**/index.atom',
+                '/src/**/index.atom:deps',
+                '/src/**/index.atom:asyncs'
+            ],
+            [`${bundleDir}/biz.css`]: [
+                '/src/**/index.atom:deps',
+                '/src/**/index.atom:asyncs'
+            ]
+            // option2: 可以考虑将公共代码打成一个包，页面代码打成一个包
+            // [`${bundleDir}/common.js`]: [
             //     '/src/common/**.js',
             //     '/src/common/**.atom'
             // ],
-            // 'bundle/common.css': [
-            //     '/src/common/**/*.js:deps',
-            //     '/src/common/**/*.atom:deps'
-            // ],
-            'bundle/biz.js': [
-                '/src/*/index.atom',
-                '/src/*/index.atom:deps',
-                '/src/*/index.atom:asyncs'
-            ],
-            'bundle/biz.css': [
-                '/src/*/index.atom:deps',
-                '/src/*/index.atom:asyncs'
-            ]
+            // option3: 也可以根据需要，将某几个页面打成一个包
+            // [`${bundleDir}/most-visited-pages.js`]: [
+            //     '/src/Home/index.atom',
+            //     '/src/Home/index.atom:deps',
+            //     '/src/Home/index.atom:asyncs',
+            //     '/src/Post/index.atom',
+            //     '/src/Post/index.atom:deps',
+            //     '/src/Post/index.atom:asyncs'
+            // ]
         })
     });

@@ -1,0 +1,15 @@
+<template>
+    <section>
+        my/info
+        <h4>name: {{name}}</h4>
+        <p>age: {{age}}</p>
+    </section>
+</template>
+<script type="config">
+{
+    props: ['name', 'age'],
+    components: {
+        'foo': '../common/component/Foo.atom'
+    }
+}
+</script>

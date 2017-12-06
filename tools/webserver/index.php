@@ -31,7 +31,7 @@ if (preg_match('/\.json($|\?)/', $request)) {
 }
 
 // 查询路由
-require_once(__DIR__.'/routes.php');
+require_once(__DIR__.'/router.php');
 $component = route($request);
 
 // 未中路由则返回
@@ -53,6 +53,13 @@ if (!empty($data)) {
     foreach ($data as $key => $value) {
         $atomWrapper->assign($key, $value);
     }
+}
+
+// 尝试找一下 data_modify.php
+$modifyDataFile = dirname("$root/src/$component").'/data_modify.php';
+
+if (file_exists($modifyDataFile)) {
+    $atomWrapper->modifyData($modifyDataFile);
 }
 
 $atomWrapper->display(

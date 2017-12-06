@@ -1,4 +1,6 @@
 {
     "/": "Home/index.atom",
-    "/post": "Post/index.atom"
+    "/post": "Post/index.atom",
+    "/my/info": "My/Info/index.atom",
+    "/my/like": "My/Like/index.atom"
 }

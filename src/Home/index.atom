@@ -1,6 +1,10 @@
 <template>
     <div>
         <img src="cat.jpg" class="avatar" />
+        <nav class="nav">
+            <a class="nav-item" href="/my/info" data-sf-href="/my/info">my-info</a>
+            <a class="nav-item" href="/my/like" data-sf-href="/my/like">my-like</a>
+        </nav>
         <ul class="posts">
             <li a-for="post in posts" class="post">
                 <post
@@ -49,6 +53,18 @@
 .post {
     margin-top: 1rem;
     padding: .5rem;
+}
+.nav {
+    display: flex;
+    height: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+.nav-item {
+    flex: 1 1 auto;
+    text-align: center;
+    color: rgb(0, 159, 147);
+    text-decoration: none;
 }
 </style>
 

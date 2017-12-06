@@ -48,7 +48,8 @@
     "project": {
         "dir": {
             "static": "static",
-            "template": "template"
+            "template": "template",
+            "bundle": "bundle"
         },
         "moduleName": "atom-site",
         "cdn": ""

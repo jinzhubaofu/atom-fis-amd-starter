@@ -9,5 +9,11 @@ export default [
     },
     {
         pattern: '/post'
+    },
+    {
+        pattern: '/my/like'
+    },
+    {
+        pattern: '/my/info'
     }
 ];
